@@ -1,34 +1,22 @@
 import HomeFilters from "@/components/home/HomeFilters";
-import QuestionCard from "@/components/home/QuestionCard";
+import QuestionCard from "@/components/cards/QuestionCard";
 import Filter from "@/components/shared/Filter/Filter";
 import NoResult from "@/components/shared/NoResult";
 import Search from "@/components/shared/Search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filter";
+import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 import React from "react";
 
-const questions = [
-  {
-    id: "1",
-    title: "Velit sit ex elit do id dolor occaecat et.",
-    tags: [
-      { id: 1, name: "js" },
-      { id: 2, name: "js" },
-    ],
-    author: "lorem ipsum",
-    upVotes: 10,
-    views: 2,
-    answers: 2,
-    createdAt: new Date(),
-  },
-];
-const page = () => {
+const page = async () => {
+  const { questions } = await getQuestions({});
+
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
-        <Link href="/" className="flex justify-end max-sm:w-full">
+        <Link href="/ask-question" className="flex justify-end max-sm:w-full">
           <Button className="primary-gradient min-h-[46px]  px-4 py-3 !text-light-900">
             Ask a Question
           </Button>
@@ -53,12 +41,12 @@ const page = () => {
         {questions.length > 0 ? (
           questions.map((question) => (
             <QuestionCard
-              key={question.id}
-              id={question.id}
+              key={question._id.toString()}
+              id={question._id.toString()}
               title={question.title}
               tags={question.tags}
-              author={question.author}
-              upVotes={question.upVotes}
+              author={question.author.username}
+              upvotes={question.upvotes.length}
               views={question.views}
               answers={question.answers}
               createdAt={question.createdAt}

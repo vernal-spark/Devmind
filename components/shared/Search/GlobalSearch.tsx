@@ -16,7 +16,6 @@ const Search = () => {
         <Input
           type="text"
           placeholder="Search"
-          value=""
           className="paragraph-regular no-focus placeholder border-none bg-transparent shadow-none outline-none "
         />
       </div>

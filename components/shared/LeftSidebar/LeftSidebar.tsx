@@ -17,7 +17,8 @@ const LeftSidebar = () => {
             (pathname.includes(link.route) && link.route.length > 1) ||
             pathname === link.route;
           return (
-            <div
+            <Link
+              href={link.route}
               key={link.route}
               className={`${isActive ? "primary-gradient rounded-lg text-light-900" : "text-dark300_light900"} flex cursor-pointer items-center justify-start gap-4 bg-transparent p-4`}
             >
@@ -33,7 +34,7 @@ const LeftSidebar = () => {
               >
                 {link.label}
               </p>
-            </div>
+            </Link>
           );
         })}
       </div>

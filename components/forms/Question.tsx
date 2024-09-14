@@ -23,35 +23,37 @@ import { createQuestion } from "@/lib/actions/question.action";
 
 const qtype: "create" | "edit" = "create";
 
-const Question = () => {
-  const mode = useTheme();
+interface Props {
+  mongoUserId: string;
+}
+
+const Question = ({ mongoUserId }: Props) => {
+  const { mode } = useTheme();
   const editorRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
       title: "",
+      explanation: "",
+      tags: [],
     },
   });
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true);
     try {
-      // async call
       await createQuestion({
         title: values.title,
-        content: values.content,
+        content: values.explanation,
         tags: values.tags,
-        author: values.author,
+        author: mongoUserId,
+        path: "/",
       });
     } catch (e) {
     } finally {
       setIsSubmitting(false);
     }
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
   }
 
   const handleKeyDown = (
@@ -63,14 +65,14 @@ const Question = () => {
       const targetInput = e.target as HTMLInputElement;
       const tagValue = targetInput.value.trim();
       if (tagValue !== "") {
-        if (tagValue.length > 15) {
+        if (tagValue?.length > 15) {
           return form.setError("tags", {
             type: "required",
             message: "Tag must be less than 15 characters",
           });
         }
         if (!field.value?.includes(tagValue as never)) {
-          form.setValue("tags", [...field, tagValue]);
+          form.setValue("tags", [...field.value, tagValue]);
           targetInput.value = "";
           form.clearErrors("tags");
         } else {
@@ -84,6 +86,7 @@ const Question = () => {
     const newTags = field.value.filter((t: any) => t !== tag);
     form.setValue("tags", newTags);
   };
+
   return (
     <div>
       <Form {...form}>
@@ -157,6 +160,7 @@ const Question = () => {
                       content_css: mode === "dark" ? "dark" : "light",
                     }}
                     initialValue=""
+                    onEditorChange={(content) => field.onChange(content)}
                   />
                 </FormControl>
                 <FormDescription className="body-regular mt-2.5 text-light-500">

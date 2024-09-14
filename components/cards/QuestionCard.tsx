@@ -7,11 +7,11 @@ import { formatAndDivideNumber, getTimestamp } from "@/lib/utils";
 interface Props {
   id: string;
   title: string;
-  tags: { id: number; name: string }[];
+  tags: { id: string; name: string }[];
   author: string;
-  upVotes: number;
+  upvotes: number;
   views: number;
-  answers: number;
+  answers: string[];
   createdAt: Date;
 }
 const QuestionCard = ({
@@ -19,7 +19,7 @@ const QuestionCard = ({
   title,
   tags,
   author,
-  upVotes,
+  upvotes,
   views,
   answers,
   createdAt,
@@ -48,31 +48,33 @@ const QuestionCard = ({
           imageUrl="/assets/icons/avatar.svg"
           alt="user"
           value={author}
-          title={`- asked ${getTimestamp(createdAt)} ago`}
+          title={`- asked ${getTimestamp(createdAt)}`}
           href={`/profile/${id}`}
           textStyles="body-medium text-dark400_light800"
         />
-        <Metric
-          imageUrl="/assets/icons/like.svg"
-          alt="upvote"
-          value={formatAndDivideNumber(upVotes)}
-          title="Votes"
-          textStyles="small-medium text-dark400_light800"
-        />
-        <Metric
-          imageUrl="/assets/icons/message.svg"
-          alt="message"
-          value={formatAndDivideNumber(answers)}
-          title="Answers"
-          textStyles="small-medium text-dark400_light800"
-        />
-        <Metric
-          imageUrl="/assets/icons/eye.svg"
-          alt="views"
-          value={formatAndDivideNumber(views)}
-          title="Views"
-          textStyles="small-medium text-dark400_light800"
-        />
+        <div className="flex items-center gap-3">
+          <Metric
+            imageUrl="/assets/icons/like.svg"
+            alt="upvote"
+            value={formatAndDivideNumber(upvotes)}
+            title="Votes"
+            textStyles="small-medium text-dark400_light800"
+          />
+          <Metric
+            imageUrl="/assets/icons/message.svg"
+            alt="message"
+            value={formatAndDivideNumber(answers.length)}
+            title="Answers"
+            textStyles="small-medium text-dark400_light800"
+          />
+          <Metric
+            imageUrl="/assets/icons/eye.svg"
+            alt="views"
+            value={formatAndDivideNumber(views)}
+            title="Views"
+            textStyles="small-medium text-dark400_light800"
+          />
+        </div>
       </div>
     </div>
   );

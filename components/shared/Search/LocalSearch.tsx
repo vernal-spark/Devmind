@@ -34,7 +34,6 @@ const LocalSearch = ({
       <Input
         type="text"
         placeholder={placeholder}
-        value=""
         className="paragraph-regular no-focus placeholder border-none bg-transparent shadow-none outline-none"
       />
       {iconPosition === "right" && (
